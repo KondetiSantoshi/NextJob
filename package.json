@@ -2,18 +2,38 @@
   "name": "nexjob-platform",
   "version": "1.0.0",
   "private": true,
-  "description": "Next-Generation Job Portal & Professional Networking Platform",
+  "description": "Next-Generation Job Portal & Professional Networking Platform (Unified Next.js Full-Stack Monorepo)",
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "client": "npm run dev --prefix client",
-    "server": "npm run dev --prefix server",
-    "seed": "npm run seed --prefix server",
-    "build": "npm run build --prefix client",
-    "install:server": "npm install --prefix server",
-    "install:client": "npm install --prefix client",
-    "install:all": "npm install && npm run install:server && npm run install:client"
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "next lint",
+    "seed": "node scripts/seed.js",
+    "seed:companies": "node scripts/seedIndianCompanies.js",
+    "seed:jobs": "node scripts/seedAllAvailableCompanyJobs.js",
+    "update:urls": "node scripts/updateSpecificJobUrls.js"
+  },
+  "dependencies": {
+    "axios": "^1.8.2",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.479.0",
+    "mongoose": "^8.12.1",
+    "next": "^14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.54.2"
   },
   "devDependencies": {
-    "concurrently": "^9.2.5"
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^22.13.10",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3"
   }
 }
