@@ -50,7 +50,7 @@ NexJob is a full-stack, enterprise-grade job portal and professional networking 
 
 | Layer | Technologies |
 |---|---|
-| **Frontend** | React 18, Vite 6, TypeScript, Tailwind CSS, React Router DOM v6, Lucide React Icons, Axios |
+| **Frontend** | Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS, Lucide React Icons, Axios |
 | **Backend** | Node.js, Express.js, MongoDB, Mongoose ODM, JWT Authentication, bcryptjs |
 | **Security** | Role-based authorization (`job_seeker`, `recruiter`, `admin`), password hashing, CORS, rate limiting |
 | **File Handling** | Multer disk storage for resumes and profile images with static public serving |
@@ -73,20 +73,20 @@ The platform is pre-seeded with realistic test data. You can log in using the **
 
 ```
 jobs/
-├── client/                      # Vite + React + TypeScript + Tailwind CSS
+├── client/                      # Next.js 14 (App Router) + React + TypeScript + Tailwind CSS
 │   ├── src/
+│   │   ├── app/                 # Next.js App Router layouts, metadata & route pages
 │   │   ├── api/                 # Axios client with JWT interceptor
-│   │   ├── components/          # Navbar, Footer, JobCard, ApplyModal, ProtectedRoute
+│   │   ├── components/          # AppShell, Navbar, Footer, JobCard, ApplyModal, ProtectedRoute
 │   │   ├── context/             # AuthContext, ToastContext
-│   │   ├── pages/               # All 22 Main Platform Pages
+│   │   ├── views/               # Client View Components for all 22 Platform Pages
 │   │   ├── types/               # TypeScript interfaces
-│   │   ├── App.tsx              # Application Routes
-│   │   ├── main.tsx             # React entry point
+│   │   ├── utils/               # Company logo & redirect helpers
 │   │   └── index.css            # Tailwind directives
+│   ├── next.config.mjs          # Configured with /api & /uploads rewrites to port 5000
 │   ├── package.json
 │   ├── tailwind.config.js
-│   ├── tsconfig.json
-│   └── vite.config.ts           # Configured with proxy to port 5000
+│   └── tsconfig.json
 │
 ├── server/                      # Node.js + Express + MongoDB
 │   ├── config/                  # Database connection (db.js)
@@ -136,7 +136,7 @@ npm run seed
 ```
 
 ### 4. Run Full-Stack Application
-Start both the Express backend (`http://localhost:5000`) and the Vite client (`http://localhost:3000`) concurrently:
+Start both the Express backend (`http://localhost:5000`) and the Next.js client (`http://localhost:3000`) concurrently:
 ```bash
 npm run dev
 ```

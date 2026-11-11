@@ -1,6 +1,8 @@
+'use client';
+
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Briefcase, Heart, Github, Linkedin, Twitter, Mail, Phone, MapPin } from 'lucide-react';
+import Link from 'next/link';
+import { Briefcase, Github, Linkedin, Twitter } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -9,7 +11,7 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
           {/* Brand info */}
           <div className="lg:col-span-2 space-y-4">
-            <Link to="/" className="flex items-center gap-2.5">
+            <Link href="/" className="flex items-center gap-2.5">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-md">
                 <Briefcase className="w-5 h-5" />
               </div>
@@ -54,32 +56,32 @@ export const Footer: React.FC = () => {
             <h4 className="text-sm font-bold uppercase tracking-wider text-white">Job Seekers</h4>
             <ul className="space-y-2 text-sm text-slate-400">
               <li>
-                <Link to="/jobs" className="hover:text-indigo-400 transition">
+                <Link href="/jobs" className="hover:text-indigo-400 transition">
                   Search All Jobs
                 </Link>
               </li>
               <li>
-                <Link to="/jobs?fresher=true" className="hover:text-indigo-400 transition">
+                <Link href="/jobs?fresher=true" className="hover:text-indigo-400 transition">
                   Fresher Jobs
                 </Link>
               </li>
               <li>
-                <Link to="/jobs?workMode=Remote" className="hover:text-indigo-400 transition">
+                <Link href="/jobs?workMode=Remote" className="hover:text-indigo-400 transition">
                   Remote Opportunities
                 </Link>
               </li>
               <li>
-                <Link to="/companies" className="hover:text-indigo-400 transition">
+                <Link href="/companies" className="hover:text-indigo-400 transition">
                   Top Hiring Companies
                 </Link>
               </li>
               <li>
-                <Link to="/community" className="hover:text-indigo-400 transition">
+                <Link href="/community" className="hover:text-indigo-400 transition">
                   Interview Experiences
                 </Link>
               </li>
               <li>
-                <Link to="/resumes" className="hover:text-indigo-400 transition">
+                <Link href="/resumes" className="hover:text-indigo-400 transition">
                   Resume Builder & Upload
                 </Link>
               </li>
@@ -91,27 +93,27 @@ export const Footer: React.FC = () => {
             <h4 className="text-sm font-bold uppercase tracking-wider text-white">Employers</h4>
             <ul className="space-y-2 text-sm text-slate-400">
               <li>
-                <Link to="/post-job" className="hover:text-indigo-400 transition">
+                <Link href="/post-job" className="hover:text-indigo-400 transition">
                   Post a Job Opening
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard/recruiter" className="hover:text-indigo-400 transition">
+                <Link href="/dashboard/recruiter" className="hover:text-indigo-400 transition">
                   Recruiter Hub
                 </Link>
               </li>
               <li>
-                <Link to="/register?role=recruiter" className="hover:text-indigo-400 transition">
+                <Link href="/register?role=recruiter" className="hover:text-indigo-400 transition">
                   Register Company Profile
                 </Link>
               </li>
               <li>
-                <Link to="/network" className="hover:text-indigo-400 transition">
+                <Link href="/network" className="hover:text-indigo-400 transition">
                   Talent Sourcing
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-indigo-400 transition">
+                <Link href="/contact" className="hover:text-indigo-400 transition">
                   Hiring Solutions
                 </Link>
               </li>
@@ -123,22 +125,22 @@ export const Footer: React.FC = () => {
             <h4 className="text-sm font-bold uppercase tracking-wider text-white">NexJob</h4>
             <ul className="space-y-2 text-sm text-slate-400">
               <li>
-                <Link to="/about" className="hover:text-indigo-400 transition">
+                <Link href="/about" className="hover:text-indigo-400 transition">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-indigo-400 transition">
+                <Link href="/contact" className="hover:text-indigo-400 transition">
                   Contact Support
                 </Link>
               </li>
               <li>
-                <Link to="/community" className="hover:text-indigo-400 transition">
+                <Link href="/community" className="hover:text-indigo-400 transition">
                   CareerPulse Community
                 </Link>
               </li>
               <li>
-                <Link to="/settings" className="hover:text-indigo-400 transition">
+                <Link href="/settings" className="hover:text-indigo-400 transition">
                   Privacy & Terms
                 </Link>
               </li>
@@ -150,7 +152,7 @@ export const Footer: React.FC = () => {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
           <p>© {new Date().getFullYear()} NexJob Inc. All rights reserved.</p>
           <div className="flex items-center gap-1">
-            Built with modern React, Node.js & MongoDB
+            Built with modern Next.js, React, Node.js & MongoDB
           </div>
         </div>
       </div>

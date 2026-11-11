@@ -7,12 +7,14 @@ const api = axios.create({
   },
 });
 
-// Intercept request to attach auth token
+// Intercept request to attach auth token safely in browser
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },
@@ -23,8 +25,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // If 401 on protected route, clean token
+    if (typeof window !== 'undefined' && error.response?.status === 401) {
       if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
         localStorage.removeItem('token');
       }

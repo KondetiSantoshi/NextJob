@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { Job, ResumeItem } from '../types';
 import { useAuth } from '../context/AuthContext';

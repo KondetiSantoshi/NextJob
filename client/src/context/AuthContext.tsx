@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import api from '../api/client';
 import { User, JobSeekerProfile, UserRole } from '../types';
@@ -23,13 +25,23 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<JobSeekerProfile | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { success, error: toastError } = useToast();
 
-  const fetchCurrentUser = async () => {
+  useEffect(() => {
+    const savedToken = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (savedToken) {
+      setToken(savedToken);
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const fetchCurrentUser = async (activeToken?: string | null) => {
+    const currentToken = activeToken !== undefined ? activeToken : token;
     try {
-      if (!token) {
+      if (!currentToken) {
         setIsLoading(false);
         return;
       }
@@ -40,7 +52,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
     } catch (err) {
       console.error('Failed to load user session', err);
-      localStorage.removeItem('token');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token');
+      }
       setToken(null);
       setUser(null);
     } finally {
@@ -49,7 +63,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   useEffect(() => {
-    fetchCurrentUser();
+    if (token) {
+      fetchCurrentUser(token);
+    }
   }, [token]);
 
   const login = async (email: string, password: string): Promise<boolean> => {

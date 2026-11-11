@@ -1,9 +1,12 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import api from '../api/client';
 import { Company, Job } from '../types';
 import { JobCard } from './JobCard';
 import { ApplyModal } from './ApplyModal';
 import { useToast } from '../context/ToastContext';
+import { resolveCompanyLogo } from '../utils/companyLogo';
 import {
   X,
   Building,
@@ -58,9 +61,7 @@ export const CompanyJobsModal: React.FC<CompanyJobsModalProps> = ({
 
   if (!isOpen) return null;
 
-  const companyLogo =
-    company?.logo ||
-    `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(companyName)}`;
+  const companyLogo = resolveCompanyLogo(company?.name || companyName, company?.logo);
 
   const careerPortal = company?.careerPageUrl || company?.website;
 

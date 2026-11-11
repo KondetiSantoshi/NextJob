@@ -1,5 +1,8 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/client';
 import {
@@ -23,8 +26,8 @@ import {
 
 export const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
@@ -39,7 +42,7 @@ export const Navbar: React.FC = () => {
         })
         .catch(() => {});
     }
-  }, [user, location.pathname]);
+  }, [user, pathname]);
 
   const getDashboardLink = () => {
     if (!user) return '/login';
@@ -48,7 +51,7 @@ export const Navbar: React.FC = () => {
     return '/dashboard/seeker';
   };
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => pathname === path;
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-all">
@@ -56,7 +59,7 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo & Main Nav */}
           <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2.5 group">
+            <Link href="/" className="flex items-center gap-2.5 group">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-700 to-purple-600 flex items-center justify-center shadow-md shadow-indigo-500/20 text-white font-bold group-hover:scale-105 transition-transform">
                 <Briefcase className="w-5 h-5" />
               </div>
@@ -72,7 +75,7 @@ export const Navbar: React.FC = () => {
 
             <nav className="hidden md:flex items-center gap-1 text-sm font-medium">
               <Link
-                to="/jobs"
+                href="/jobs"
                 className={`px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5 ${
                   isActive('/jobs')
                     ? 'text-indigo-600 bg-indigo-50 font-semibold'
@@ -83,7 +86,7 @@ export const Navbar: React.FC = () => {
                 Find Jobs
               </Link>
               <Link
-                to="/companies"
+                href="/companies"
                 className={`px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5 ${
                   isActive('/companies')
                     ? 'text-indigo-600 bg-indigo-50 font-semibold'
@@ -97,7 +100,7 @@ export const Navbar: React.FC = () => {
                 </span>
               </Link>
               <Link
-                to="/network"
+                href="/network"
                 className={`px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5 ${
                   isActive('/network')
                     ? 'text-indigo-600 bg-indigo-50 font-semibold'
@@ -108,7 +111,7 @@ export const Navbar: React.FC = () => {
                 Network
               </Link>
               <Link
-                to="/community"
+                href="/community"
                 className={`px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5 ${
                   isActive('/community')
                     ? 'text-indigo-600 bg-indigo-50 font-semibold'
@@ -127,7 +130,7 @@ export const Navbar: React.FC = () => {
               <>
                 {/* Dashboard Shortcut */}
                 <Link
-                  to={getDashboardLink()}
+                  href={getDashboardLink()}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
                 >
                   <LayoutDashboard className="w-4 h-4 text-indigo-600" />
@@ -143,7 +146,7 @@ export const Navbar: React.FC = () => {
                 {/* Recruiter Post Job Button */}
                 {user.role === 'recruiter' && (
                   <Link
-                    to="/post-job"
+                    href="/post-job"
                     className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition shadow-sm"
                   >
                     <PlusCircle className="w-4 h-4" />
@@ -153,7 +156,7 @@ export const Navbar: React.FC = () => {
 
                 {/* Messages */}
                 <Link
-                  to="/messages"
+                  href="/messages"
                   className="p-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 rounded-lg relative transition-colors"
                   title="Messages"
                 >
@@ -162,7 +165,7 @@ export const Navbar: React.FC = () => {
 
                 {/* Notifications */}
                 <Link
-                  to="/notifications"
+                  href="/notifications"
                   className="p-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 rounded-lg relative transition-colors"
                   title="Notifications"
                 >
@@ -206,7 +209,7 @@ export const Navbar: React.FC = () => {
 
                       <div className="py-1">
                         <Link
-                          to="/profile"
+                          href="/profile"
                           onClick={() => setUserDropdownOpen(false)}
                           className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600"
                         >
@@ -217,7 +220,7 @@ export const Navbar: React.FC = () => {
                         {user.role === 'job_seeker' && (
                           <>
                             <Link
-                              to="/applications"
+                              href="/applications"
                               onClick={() => setUserDropdownOpen(false)}
                               className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600"
                             >
@@ -225,7 +228,7 @@ export const Navbar: React.FC = () => {
                               My Applications
                             </Link>
                             <Link
-                              to="/saved-jobs"
+                              href="/saved-jobs"
                               onClick={() => setUserDropdownOpen(false)}
                               className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600"
                             >
@@ -233,7 +236,7 @@ export const Navbar: React.FC = () => {
                               Saved Jobs
                             </Link>
                             <Link
-                              to="/resumes"
+                              href="/resumes"
                               onClick={() => setUserDropdownOpen(false)}
                               className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600"
                             >
@@ -245,7 +248,7 @@ export const Navbar: React.FC = () => {
 
                         {user.role === 'admin' && (
                           <Link
-                            to="/dashboard/admin"
+                            href="/dashboard/admin"
                             onClick={() => setUserDropdownOpen(false)}
                             className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600"
                           >
@@ -255,7 +258,7 @@ export const Navbar: React.FC = () => {
                         )}
 
                         <Link
-                          to="/settings"
+                          href="/settings"
                           onClick={() => setUserDropdownOpen(false)}
                           className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600"
                         >
@@ -269,7 +272,7 @@ export const Navbar: React.FC = () => {
                           onClick={() => {
                             setUserDropdownOpen(false);
                             logout();
-                            navigate('/');
+                            router.push('/');
                           }}
                           className="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-rose-600 hover:bg-rose-50"
                         >
@@ -284,19 +287,19 @@ export const Navbar: React.FC = () => {
             ) : (
               <div className="flex items-center gap-3">
                 <Link
-                  to="/login"
+                  href="/login"
                   className="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-indigo-600 transition"
                 >
                   Log In
                 </Link>
                 <Link
-                  to="/register"
+                  href="/register"
                   className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md shadow-indigo-500/20 transition"
                 >
                   Register
                 </Link>
                 <Link
-                  to="/register?role=recruiter"
+                  href="/register?role=recruiter"
                   className="px-4 py-2 text-sm font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-xl border border-indigo-200/60 transition"
                 >
                   Employer / Post Job
@@ -321,28 +324,28 @@ export const Navbar: React.FC = () => {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 space-y-2">
           <Link
-            to="/jobs"
+            href="/jobs"
             onClick={() => setMobileMenuOpen(false)}
             className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-slate-50"
           >
             Find Jobs
           </Link>
           <Link
-            to="/companies"
+            href="/companies"
             onClick={() => setMobileMenuOpen(false)}
             className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-slate-50"
           >
             Companies
           </Link>
           <Link
-            to="/network"
+            href="/network"
             onClick={() => setMobileMenuOpen(false)}
             className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-slate-50"
           >
             Professional Network
           </Link>
           <Link
-            to="/community"
+            href="/community"
             onClick={() => setMobileMenuOpen(false)}
             className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-slate-50"
           >
@@ -352,28 +355,28 @@ export const Navbar: React.FC = () => {
           {user ? (
             <div className="pt-4 border-t border-slate-200 space-y-2">
               <Link
-                to={getDashboardLink()}
+                href={getDashboardLink()}
                 onClick={() => setMobileMenuOpen(false)}
                 className="block px-3 py-2 rounded-lg text-base font-semibold text-indigo-600 bg-indigo-50"
               >
                 Dashboard
               </Link>
               <Link
-                to="/profile"
+                href="/profile"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700"
               >
                 My Profile
               </Link>
               <Link
-                to="/messages"
+                href="/messages"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700"
               >
                 Messages
               </Link>
               <Link
-                to="/notifications"
+                href="/notifications"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700"
               >
@@ -383,7 +386,7 @@ export const Navbar: React.FC = () => {
                 onClick={() => {
                   setMobileMenuOpen(false);
                   logout();
-                  navigate('/');
+                  router.push('/');
                 }}
                 className="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-rose-600"
               >
@@ -393,14 +396,14 @@ export const Navbar: React.FC = () => {
           ) : (
             <div className="pt-4 border-t border-slate-200 flex flex-col gap-2">
               <Link
-                to="/login"
+                href="/login"
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full text-center py-2.5 text-sm font-semibold text-slate-700 bg-slate-100 rounded-xl"
               >
                 Log In
               </Link>
               <Link
-                to="/register"
+                href="/register"
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full text-center py-2.5 text-sm font-semibold text-white bg-indigo-600 rounded-xl"
               >

@@ -1,5 +1,7 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+'use client';
+
+import React, { useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import { UserRole } from '../types';
 
@@ -10,9 +12,26 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles }) => {
   const { user, isLoading } = useAuth();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
 
-  if (isLoading) {
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (!user) {
+      const target = pathname ? `/login?redirect=${encodeURIComponent(pathname)}` : '/login';
+      router.replace(target);
+      return;
+    }
+
+    if (allowedRoles && !allowedRoles.includes(user.role)) {
+      if (user.role === 'admin') router.replace('/dashboard/admin');
+      else if (user.role === 'recruiter') router.replace('/dashboard/recruiter');
+      else router.replace('/dashboard/seeker');
+    }
+  }, [user, isLoading, allowedRoles, router, pathname]);
+
+  if (isLoading || !user || (allowedRoles && !allowedRoles.includes(user.role))) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-3">
@@ -21,16 +40,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowe
         </div>
       </div>
     );
-  }
-
-  if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    if (user.role === 'admin') return <Navigate to="/dashboard/admin" replace />;
-    if (user.role === 'recruiter') return <Navigate to="/dashboard/recruiter" replace />;
-    return <Navigate to="/dashboard/seeker" replace />;
   }
 
   return <>{children}</>;

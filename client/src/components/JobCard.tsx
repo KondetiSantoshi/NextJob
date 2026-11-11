@@ -1,5 +1,8 @@
+'use client';
+
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Job } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -17,6 +20,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { getSpecificJobApplyUrl } from '../utils/jobRedirect';
+import { resolveCompanyLogo } from '../utils/companyLogo';
 
 interface JobCardProps {
   job: Job;
@@ -32,7 +36,7 @@ export const JobCard: React.FC<JobCardProps> = ({
   onSaveToggle,
 }) => {
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { success, error } = useToast();
   const [isSaved, setIsSaved] = useState(isSavedInitial);
   const [saving, setSaving] = useState(false);
@@ -43,7 +47,7 @@ export const JobCard: React.FC<JobCardProps> = ({
 
     if (!user) {
       error('Please sign in to save jobs');
-      navigate('/login');
+      router.push('/login');
       return;
     }
 
@@ -83,56 +87,14 @@ export const JobCard: React.FC<JobCardProps> = ({
   };
 
   // Resolve Real Company Logo
-  const getCompanyLogo = () => {
-    if (job.companyLogo && !job.companyLogo.includes('dicebear')) return job.companyLogo;
-    if (job.company?.logo && !job.company.logo.includes('dicebear')) return job.company.logo;
-
-    const lowerName = (job.companyName || '').toLowerCase();
-    if (lowerName.includes('google')) return '/logos/google.svg';
-    if (lowerName.includes('tcs') || lowerName.includes('tata consultancy')) return '/logos/tcs.svg';
-    if (lowerName.includes('infosys')) return '/logos/infosys.svg';
-    if (lowerName.includes('wipro')) return '/logos/wipro.svg';
-    if (lowerName.includes('swiggy')) return '/logos/swiggy.svg';
-    if (lowerName.includes('zomato') || lowerName.includes('blinkit')) return '/logos/zomato.svg';
-    if (lowerName.includes('flipkart')) return '/logos/flipkart.svg';
-    if (lowerName.includes('phonepe')) return '/logos/phonepe.svg';
-    if (lowerName.includes('razorpay')) return '/logos/razorpay.svg';
-    if (lowerName.includes('cred')) return '/logos/cred.svg';
-    if (lowerName.includes('jio') || lowerName.includes('reliance')) return '/logos/jio.svg';
-    if (lowerName.includes('amazon')) return '/logos/amazon.svg';
-    if (lowerName.includes('microsoft')) return '/logos/microsoft.svg';
-    if (lowerName.includes('meta') || lowerName.includes('facebook')) return '/logos/meta.svg';
-    if (lowerName.includes('apple')) return '/logos/apple.svg';
-    if (lowerName.includes('netflix')) return '/logos/netflix.svg';
-    if (lowerName.includes('uber')) return '/logos/uber.svg';
-    if (lowerName.includes('stripe')) return '/logos/stripe.svg';
-    if (lowerName.includes('nvidia')) return '/logos/nvidia.svg';
-    if (lowerName.includes('hcl')) return '/logos/hcl.svg';
-    if (lowerName.includes('cognizant')) return '/logos/cognizant.svg';
-    if (lowerName.includes('zoho')) return '/logos/zoho.svg';
-    if (lowerName.includes('freshworks')) return '/logos/freshworks.svg';
-    if (lowerName.includes('paytm')) return '/logos/paytm.svg';
-    if (lowerName.includes('zepto')) return '/logos/zepto.svg';
-    if (lowerName.includes('zerodha')) return '/logos/zerodha.svg';
-    if (lowerName.includes('groww')) return '/logos/groww.svg';
-    if (lowerName.includes('meesho')) return '/logos/meesho.svg';
-    if (lowerName.includes('hdfc')) return '/logos/hdfc.svg';
-    if (lowerName.includes('icici')) return '/logos/icici.svg';
-    if (lowerName.includes('walmart')) return '/logos/walmart.svg';
-    if (lowerName.includes('tech mahindra')) return '/logos/techmahindra.svg';
-
-    return (
-      job.companyLogo ||
-      job.company?.logo ||
-      `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(job.companyName)}`
-    );
-  };
+  const getCompanyLogo = () =>
+    resolveCompanyLogo(job.companyName, job.companyLogo, job.company?.logo);
 
   const handleApplyClick = () => {
     if (onApplyClick) {
       onApplyClick(job);
     } else {
-      navigate(`/jobs/${job._id}`);
+      router.push(`/jobs/${job._id}`);
     }
   };
 
@@ -190,7 +152,7 @@ export const JobCard: React.FC<JobCardProps> = ({
           <div className="min-w-0">
             <div className="flex items-center gap-1.5 flex-wrap">
               <Link
-                to={job.company?._id ? `/companies/${job.company._id}` : `/companies`}
+                href={job.company?._id ? `/companies/${job.company._id}` : `/companies`}
                 className="text-xs sm:text-sm font-bold text-slate-700 hover:text-indigo-600 transition flex items-center gap-1 truncate"
               >
                 <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -205,7 +167,7 @@ export const JobCard: React.FC<JobCardProps> = ({
             </div>
 
             <Link
-              to={`/jobs/${job._id}`}
+              href={`/jobs/${job._id}`}
               className="mt-1 text-base sm:text-lg font-black text-slate-900 group-hover:text-indigo-600 transition line-clamp-1 block leading-snug"
             >
               {job.title}
@@ -297,7 +259,7 @@ export const JobCard: React.FC<JobCardProps> = ({
           </button>
 
           <Link
-            to={`/jobs/${job._id}`}
+            href={`/jobs/${job._id}`}
             className="px-2.5 py-2 text-xs font-bold text-slate-500 hover:text-indigo-600 transition"
           >
             Details

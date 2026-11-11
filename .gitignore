@@ -9,8 +9,13 @@ server/node_modules/
 # Production builds
 dist/
 client/dist/
+.next/
+client/.next/
+client/out/
 build/
 coverage/
+*.tsbuildinfo
+client/next-env.d.ts
 
 # Environment files
 .env
